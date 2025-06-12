@@ -11,6 +11,13 @@ export interface User {
   program_id?: string
   current_semester?: number
   profile_completed?: boolean
+  // Additional MindNest specific fields
+  yearOfStudy?: string
+  department?: string
+  faculty?: string
+  coreSubject?: string
+  electivePhysics?: string
+  electiveChemistry?: string
 }
 
 export interface AuthState {
@@ -46,31 +53,36 @@ export interface SignupData {
 }
 
 class AuthService {
+  private isClient = typeof window !== 'undefined'
+
   async login(prn: string, password: string): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
-      // For demo purposes - handle test credentials
-      if (prn === "test" && password === "test") {
-        // Create a demo user session
+      // Demo mode check - only in development
+      if (process.env.NODE_ENV === 'development' && prn === 'demo' && password === 'demo') {
         const demoUser: User = {
           id: "demo-user-123",
-          email: "test@student.mu.ac.in",
-          prn: "test",
+          email: "demo@mindnest.app",
+          prn: "demo",
           fullName: "Demo Student",
           college_id: "demo-college",
           program_id: "demo-program",
           current_semester: 3,
           profile_completed: true,
+          yearOfStudy: "FY",
+          department: "Computer Engineering",
+          faculty: "Engineering"
         }
 
-        // Store in localStorage for demo
-        localStorage.setItem("auth_user", JSON.stringify(demoUser))
-        localStorage.setItem("auth_token", "demo_token_123")
+        if (this.isClient) {
+          localStorage.setItem("mindnest_user", JSON.stringify(demoUser))
+          localStorage.setItem("mindnest_token", "demo_token_123")
+        }
 
         return { success: true, user: demoUser }
       }
 
-      // For real authentication, use email format
-      const email = `${prn}@student.mu.ac.in`
+      // Real authentication flow
+      const email = `${prn}@student.mindnest.app`
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -82,7 +94,6 @@ class AuthService {
       }
 
       if (data.user) {
-        // Get user profile from database
         const userProfile = await DatabaseService.getUserByEmail(data.user.email!)
 
         if (userProfile) {
@@ -103,49 +114,52 @@ class AuthService {
 
       return { success: false, error: "User profile not found" }
     } catch (error) {
-      console.error("Login error:", error)
+      console.error("MindNest login error:", error)
       return { success: false, error: "Login failed. Please try again." }
     }
   }
 
   async signup(signupData: SignupData): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
-      // Generate email from full name
-      const email = `${signupData.fullName.toLowerCase().replace(/\s+/g, ".")}@student.mu.ac.in`
+      const email = `${signupData.fullName.toLowerCase().replace(/\s+/g, ".")}@student.mindnest.app`
       const prn = signupData.rollNumber || `PRN${Date.now()}`
 
-      // For demo purposes, don't actually create Supabase auth user
-      // Just create the profile in our database
-      const demoUser: User = {
+      const newUser: User = {
         id: `user-${Date.now()}`,
         email: email,
         prn: prn,
         fullName: signupData.fullName,
         current_semester: this.mapYearToSemester(signupData.yearOfStudy),
         profile_completed: true,
+        yearOfStudy: signupData.yearOfStudy,
+        department: signupData.department,
+        faculty: signupData.faculty,
+        coreSubject: signupData.coreSubject,
+        electivePhysics: signupData.electivePhysics,
+        electiveChemistry: signupData.electiveChemistry,
       }
 
-      // Store in localStorage for demo
-      localStorage.setItem("auth_user", JSON.stringify(demoUser))
-      localStorage.setItem("auth_token", `token_${Date.now()}`)
+      if (this.isClient) {
+        localStorage.setItem("mindnest_user", JSON.stringify(newUser))
+        localStorage.setItem("mindnest_token", `token_${Date.now()}`)
+      }
 
-      return { success: true, user: demoUser }
+      return { success: true, user: newUser }
     } catch (error) {
-      console.error("Signup error:", error)
+      console.error("MindNest signup error:", error)
       return { success: false, error: "Registration failed. Please try again." }
     }
   }
 
   private mapYearToSemester(yearOfStudy: string): number {
     const availableSemesters = mapUserYearToSemesters(yearOfStudy)
-    return availableSemesters[0] // Return first semester of the year as default
+    return availableSemesters[0]
   }
 
-  // Add a new method to get user's year level
   getUserYearLevel(yearOfStudy: string): string {
     const yearMap: { [key: string]: string } = {
       FY: "FY",
-      SY: "SY",
+      SY: "SY", 
       TY: "TY",
       BE: "BE",
       PG: "PG",
@@ -159,19 +173,20 @@ class AuthService {
     try {
       await supabase.auth.signOut()
     } catch (error) {
-      console.error("Logout error:", error)
+      console.error("MindNest logout error:", error)
     } finally {
-      // Always clear localStorage
-      localStorage.removeItem("auth_user")
-      localStorage.removeItem("auth_token")
+      if (this.isClient) {
+        localStorage.removeItem("mindnest_user")
+        localStorage.removeItem("mindnest_token")
+      }
     }
   }
 
   getCurrentUser(): User | null {
-    if (typeof window === "undefined") return null
+    if (!this.isClient) return null
 
     try {
-      const userStr = localStorage.getItem("auth_user")
+      const userStr = localStorage.getItem("mindnest_user")
       return userStr ? JSON.parse(userStr) : null
     } catch (error) {
       console.error("Error getting current user:", error)
@@ -180,8 +195,8 @@ class AuthService {
   }
 
   isAuthenticated(): boolean {
-    if (typeof window === "undefined") return false
-    return !!localStorage.getItem("auth_token")
+    if (!this.isClient) return false
+    return !!localStorage.getItem("mindnest_token")
   }
 }
 

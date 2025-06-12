@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Eye, EyeOff, Lock, User, AlertCircle, Loader2 } from "lucide-react"
+import { Eye, EyeOff, Lock, User, AlertCircle, Loader2, Brain, Network } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/hooks/use-auth"
@@ -27,7 +27,6 @@ export default function LoginPage() {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
-    // Clear errors when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }))
     }
@@ -40,9 +39,9 @@ export default function LoginPage() {
     const newErrors: { [key: string]: string } = {}
 
     if (!formData.prn.trim()) {
-      newErrors.prn = "PRN is required"
+      newErrors.prn = "Username is required"
     } else if (formData.prn.length < 3) {
-      newErrors.prn = "PRN must be at least 3 characters"
+      newErrors.prn = "Username must be at least 3 characters"
     }
 
     if (!formData.password.trim()) {
@@ -69,7 +68,6 @@ export default function LoginPage() {
       const result = await login(formData.prn, formData.password)
 
       if (result.success) {
-        // Success! Redirect to dashboard
         router.push("/dashboard")
       } else {
         setSubmitError(result.error || "Login failed. Please try again.")
@@ -88,9 +86,13 @@ export default function LoginPage() {
         <div className="container flex h-16 md:h-20 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-6">
             <Link href="/landing" className="flex items-center">
-              <div className="h-8 w-8 md:h-12 md:w-12 bg-yellow-500 border-4 border-black rotate-12"></div>
-              <div className="h-8 w-8 md:h-12 md:w-12 bg-blue-600 border-4 border-black -ml-4 md:-ml-6 -rotate-12"></div>
-              <span className="font-black text-lg md:text-2xl tracking-tighter ml-3 md:ml-4 text-white">STUDGEM</span>
+              <div className="h-8 w-8 md:h-12 md:w-12 bg-yellow-500 border-4 border-black rotate-12 flex items-center justify-center">
+                <Brain className="h-4 w-4 md:h-6 md:w-6 text-black" />
+              </div>
+              <div className="h-8 w-8 md:h-12 md:w-12 bg-blue-600 border-4 border-black -ml-4 md:-ml-6 -rotate-12 flex items-center justify-center">
+                <Network className="h-4 w-4 md:h-6 md:w-6 text-white" />
+              </div>
+              <span className="font-black text-lg md:text-2xl tracking-tighter ml-3 md:ml-4 text-white">MINDNEST</span>
             </Link>
           </div>
           <div className="flex items-center gap-4">
@@ -127,24 +129,24 @@ export default function LoginPage() {
             <div className="mb-6 p-4 bg-blue-100 border-4 border-blue-600 text-blue-800">
               <h3 className="font-bold mb-2">DEMO CREDENTIALS:</h3>
               <p className="text-sm">
-                PRN: <strong>test</strong>
+                Username: <strong>demo</strong>
               </p>
               <p className="text-sm">
-                Password: <strong>test</strong>
+                Password: <strong>demo</strong>
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-3">
                 <Label htmlFor="prn" className="text-base md:text-lg font-bold">
-                  MU PRN NUMBER
+                  USERNAME
                 </Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
                   <Input
                     id="prn"
                     name="prn"
-                    placeholder="Enter your PRN"
+                    placeholder="Enter your username"
                     className={`border-4 ${errors.prn ? "border-red-600" : "border-black"} h-12 md:h-14 text-base md:text-lg font-mono shadow-brutal focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-blue-600 pl-10`}
                     value={formData.prn}
                     onChange={handleChange}
@@ -230,7 +232,7 @@ export default function LoginPage() {
                 href="/signup"
                 className="block w-full bg-yellow-500 border-4 border-black px-6 py-3 font-bold text-base md:text-lg shadow-brutal hover:translate-y-1 hover:shadow-none transition-all"
               >
-                REGISTER WITH PRN
+                CREATE ACCOUNT
               </Link>
             </div>
           </div>
@@ -238,12 +240,12 @@ export default function LoginPage() {
           {/* Right Column - Info */}
           <div className="bg-black text-white border-8 border-black p-6 md:p-8 shadow-brutal-inverse">
             <h2 className="text-2xl md:text-3xl font-black mb-6 md:mb-8 uppercase border-b-4 border-white pb-2">
-              MUMBAI UNIVERSITY
+              MINDNEST
             </h2>
 
             <div className="space-y-6 md:space-y-8">
               <div className="space-y-3">
-                <h3 className="text-lg md:text-xl font-bold">STUDENT DASHBOARD</h3>
+                <h3 className="text-lg md:text-xl font-bold">LEARNING DASHBOARD</h3>
                 <p className="text-base md:text-lg">
                   Access your academic information, resources, and tools in one place.
                 </p>
@@ -256,7 +258,7 @@ export default function LoginPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="h-6 w-6 bg-blue-600"></div>
-                  <span className="text-sm md:text-base">AI Assistant "StudGem"</span>
+                  <span className="text-sm md:text-base">AI Learning Assistant</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="h-6 w-6 bg-yellow-500"></div>
@@ -274,12 +276,12 @@ export default function LoginPage() {
 
               <div className="bg-gradient-to-br from-cyan-400 to-fuchsia-500 p-4 md:p-6 border-4 border-white mt-6">
                 <h3 className="text-lg md:text-xl font-bold mb-3">NEED HELP?</h3>
-                <p className="mb-4 text-sm md:text-base">Contact your college administrator or email us at:</p>
+                <p className="mb-4 text-sm md:text-base">Contact support or email us at:</p>
                 <a
-                  href="mailto:support@studgem.edu"
+                  href="mailto:support@mindnest.app"
                   className="bg-white text-black border-4 border-black px-3 md:px-4 py-2 font-bold shadow-brutal-white hover:translate-y-1 hover:shadow-none transition-all inline-block text-sm md:text-base"
                 >
-                  support@studgem.edu
+                  support@mindnest.app
                 </a>
               </div>
             </div>

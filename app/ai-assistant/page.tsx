@@ -16,6 +16,8 @@ import {
   Square,
   User,
   LayoutDashboard,
+  Brain,
+  Network,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -41,7 +43,7 @@ export default function AIAssistantPage() {
   const [chatHistory, setChatHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([
     {
       role: "assistant",
-      content: "Hello! I'm StudGem, your AI study assistant. How can I help you today?",
+      content: "Hello! I'm MindNest AI, your learning assistant. How can I help you today?",
     },
   ])
 
@@ -87,10 +89,14 @@ export default function AIAssistantPage() {
             <Sidebar className="z-50">
               <SidebarHeader className="flex flex-col items-center justify-center py-6">
                 <div className="flex items-center mb-2">
-                  <div className="h-10 w-10 bg-yellow-500 border-4 border-black rotate-12"></div>
-                  <div className="h-10 w-10 bg-blue-600 border-4 border-black -ml-5 -rotate-12"></div>
+                  <div className="h-10 w-10 bg-yellow-500 border-4 border-black rotate-12 flex items-center justify-center">
+                    <Brain className="h-5 w-5 text-black" />
+                  </div>
+                  <div className="h-10 w-10 bg-blue-600 border-4 border-black -ml-5 -rotate-12 flex items-center justify-center">
+                    <Network className="h-5 w-5 text-white" />
+                  </div>
                 </div>
-                <span className="font-black text-xl tracking-tighter">STUDGEM</span>
+                <span className="font-black text-xl tracking-tighter">MINDNEST</span>
               </SidebarHeader>
 
               <SidebarContent>
@@ -115,7 +121,7 @@ export default function AIAssistantPage() {
                       <SidebarMenuItem>
                         <SidebarMenuButton isActive tooltip="AI Assistant">
                           <Gem />
-                          <span>StudGem AI</span>
+                          <span>MindNest AI</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     </SidebarMenu>
@@ -201,7 +207,7 @@ function MainContent({
             <SidebarTrigger />
             <div className="flex items-center">
               <Gem className="h-6 w-6 text-white" />
-              <h1 className="text-lg md:text-xl font-black ml-2 text-white">STUDGEM AI ASSISTANT</h1>
+              <h1 className="text-lg md:text-xl font-black ml-2 text-white">MINDNEST AI ASSISTANT</h1>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -299,7 +305,7 @@ function MainContent({
                 <Input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Ask StudGem anything..."
+                  placeholder="Ask MindNest AI anything..."
                   className="border-4 border-black h-12 md:h-14 text-sm md:text-lg font-mono shadow-brutal focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-blue-600 flex-1"
                 />
                 <button

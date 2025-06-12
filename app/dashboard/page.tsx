@@ -15,6 +15,8 @@ import {
   Settings,
   Square,
   User,
+  Brain,
+  Network,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
@@ -39,6 +41,7 @@ import Link from "next/link"
 import { SemesterSelector } from "@/components/semester-selector"
 import { useSemesterData } from "@/hooks/use-semester-data"
 import { getUserAvailableSemesters } from "@/lib/semester-utils"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function DashboardPage() {
   const [darkMode, setDarkMode] = useState(false)
@@ -63,11 +66,16 @@ export default function DashboardPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="flex items-center justify-center mb-4">
-            <div className="h-12 w-12 bg-yellow-500 border-4 border-black rotate-12 animate-pulse"></div>
-            <div className="h-12 w-12 bg-blue-600 border-4 border-black -ml-6 -rotate-12 animate-pulse"></div>
+            <div className="h-12 w-12 bg-yellow-500 border-4 border-black rotate-12 flex items-center justify-center animate-pulse">
+              <Brain className="h-6 w-6 text-black" />
+            </div>
+            <div className="h-12 w-12 bg-blue-600 border-4 border-black -ml-6 -rotate-12 flex items-center justify-center animate-pulse">
+              <Network className="h-6 w-6 text-white" />
+            </div>
           </div>
-          <h1 className="text-2xl font-black font-mono">STUDGEM</h1>
+          <h1 className="text-2xl font-black font-mono">MINDNEST</h1>
           <p className="font-bold font-mono">Loading Dashboard...</p>
+          <LoadingSpinner className="mt-4" />
         </div>
       </div>
     )
@@ -86,10 +94,14 @@ export default function DashboardPage() {
             <Sidebar className="z-50">
               <SidebarHeader className="flex flex-col items-center justify-center py-6">
                 <div className="flex items-center mb-2">
-                  <div className="h-10 w-10 bg-yellow-500 border-4 border-black rotate-12"></div>
-                  <div className="h-10 w-10 bg-blue-600 border-4 border-black -ml-5 -rotate-12"></div>
+                  <div className="h-10 w-10 bg-yellow-500 border-4 border-black rotate-12 flex items-center justify-center">
+                    <Brain className="h-5 w-5 text-black" />
+                  </div>
+                  <div className="h-10 w-10 bg-blue-600 border-4 border-black -ml-5 -rotate-12 flex items-center justify-center">
+                    <Network className="h-5 w-5 text-white" />
+                  </div>
                 </div>
-                <span className="font-black text-xl tracking-tighter">STUDGEM</span>
+                <span className="font-black text-xl tracking-tighter">MINDNEST</span>
                 {authState.user && (
                   <p className="text-sm font-bold text-gray-600 mt-1">
                     Welcome, {authState.user.fullName.split(" ")[0]}!
@@ -136,7 +148,7 @@ export default function DashboardPage() {
                         <SidebarMenuButton tooltip="AI Assistant">
                           <Link href="/ai-assistant" className="flex items-center gap-3 w-full">
                             <Gem />
-                            <span>StudGem AI</span>
+                            <span>MindNest AI</span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -453,14 +465,14 @@ function DashboardContent({ user }: { user: any }) {
         )}
       </div>
 
-      {/* Keep existing AI Assistant & Notices section */}
+      {/* AI Assistant & Notices section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gradient-to-br from-cyan-400 to-fuchsia-500 border-8 border-black p-6 shadow-brutal">
           <h3 className="text-xl md:text-2xl font-black mb-5 uppercase border-b-4 border-black pb-2">
-            STUDGEM AI ASSISTANT
+            MINDNEST AI ASSISTANT
           </h3>
           <p className="text-lg mb-6 text-white">
-            Your personal AI study companion. Ask questions, get explanations, and create study plans.
+            Your personal AI learning companion. Ask questions, get explanations, and create study plans.
           </p>
           <div className="bg-white border-4 border-black p-4 mb-5">
             <p className="font-mono">What would you like help with today?</p>
@@ -488,7 +500,7 @@ function DashboardContent({ user }: { user: any }) {
               <div>
                 <p className="font-bold">Exam Schedule Released</p>
                 <p className="text-sm text-gray-600">
-                  Mumbai University has released the exam schedule for Semester 4.
+                  The university has released the exam schedule for Semester 4.
                 </p>
               </div>
             </li>

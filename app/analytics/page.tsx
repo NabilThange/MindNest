@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { Circle, Download, FileText, Filter, PieChart, Square, User, LayoutDashboard } from "lucide-react"
+import { Circle, Download, FileText, Filter, PieChart, Square, User, LayoutDashboard, Brain, Network } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Sidebar,
@@ -53,10 +53,14 @@ export default function AnalyticsPage() {
             <Sidebar className="z-50">
               <SidebarHeader className="flex flex-col items-center justify-center py-6">
                 <div className="flex items-center mb-2">
-                  <div className="h-10 w-10 bg-yellow-500 border-4 border-black rotate-12"></div>
-                  <div className="h-10 w-10 bg-blue-600 border-4 border-black -ml-5 -rotate-12"></div>
+                  <div className="h-10 w-10 bg-yellow-500 border-4 border-black rotate-12 flex items-center justify-center">
+                    <Brain className="h-5 w-5 text-black" />
+                  </div>
+                  <div className="h-10 w-10 bg-blue-600 border-4 border-black -ml-5 -rotate-12 flex items-center justify-center">
+                    <Network className="h-5 w-5 text-white" />
+                  </div>
                 </div>
-                <span className="font-black text-xl tracking-tighter">STUDGEM</span>
+                <span className="font-black text-xl tracking-tighter">MINDNEST</span>
               </SidebarHeader>
 
               <SidebarContent>
@@ -364,7 +368,7 @@ export default function AnalyticsPage() {
                               <h4 className="text-lg md:text-xl font-bold mb-4 border-b-4 border-white pb-2">
                                 RECOMMENDED FOCUS
                               </h4>
-                              <ul className="space-y-3">
+                              <ul className="space-y-4">
                                 <li className="flex items-start gap-3">
                                   <div className="h-6 w-6 bg-red-600 mt-0.5 flex-shrink-0"></div>
                                   <div>
