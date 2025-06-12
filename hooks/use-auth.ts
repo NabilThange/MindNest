@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { useState, useEffect, createContext, useContext } from "react"
+import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
 import { authService, type AuthState } from "@/lib/auth"
 
 const AuthContext = createContext<{
@@ -11,7 +10,7 @@ const AuthContext = createContext<{
   logout: () => void
 } | null>(null)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
     user: null,
